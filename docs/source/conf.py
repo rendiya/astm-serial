@@ -20,6 +20,8 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath("../"))
 from astm_serial import version
+import pip
+print pip.main(['install', 'pyserial'])
 # sys.path.insert(0, os.path.abspath('.'))
 
 
