@@ -20,7 +20,7 @@ if "install" in sys.argv:
 
 setup (
     name='astm-serial',
-    version='0.0.1',
+    version='0.0.2',
     url='https://github.com/rendiya/astm-serial',
     author='rendiya',
     author_email='ligerrendy@gmail.com',

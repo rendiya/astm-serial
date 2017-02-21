@@ -109,7 +109,9 @@ class AstmConn(object):
             self.serial.write(NAK)
         else:
             data = check_data
-        print data.encode('hex')
+        HexData = data.encode('hex')
+        print HexData
+        print HexData.decode('hex')
         return data
     def close_session(self):
         """End the communication data
