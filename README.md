@@ -1,5 +1,11 @@
 sampel communication with astm e1381 protocol.
 
+ready on pip
+
+```
+pip install astm-serial
+```
+
 under construction
 
 schema communication:
