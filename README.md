@@ -6,6 +6,8 @@ ready on pip
 pip install astm-serial
 ```
 
+for documentation please visit http://astm-serial.readthedocs.io/
+
 under construction
 
 schema communication:
