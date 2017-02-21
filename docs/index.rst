@@ -21,7 +21,7 @@ How to install :
 
 Quickstart
 
-.. code:: python
+.. highlight:: python
    from astm_serial.client import AstmConn
    astm = AstmConn(port='/dev/ttyACM0', baudrate=9600)
    astm.open_session()
