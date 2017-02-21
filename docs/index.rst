@@ -21,7 +21,8 @@ How to install :
 
 Quickstart
 
-.. literalinclude:: example.py
+.. automodule:: astm_serial.client
+   :members:
 
 
 Indices and tables
