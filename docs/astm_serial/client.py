@@ -1,30 +1,19 @@
 # -*- coding: utf-8 -*-
 # rendiya (c) 2017
 
-"""ASTM e1381 client result
-"""
-
 import time
 import serial
 from .constanta import *
 
 class AstmConn(object):
-    r"""Abstract class that implements the common driver for the TPG 261 and
-    TPG 262 dual channel measurement and control unit. The driver implements
-    the following 6 commands out the 39 in the specification:
-    * PNR: Program number (firmware version)
-    * PR[1,2]: Pressure measurement (measurement data) gauge [1, 2]
-    * PRX: Pressure measurement (measurement data) gauge 1 and 2
-    * TID: Transmitter identification (gauge identification)
-    * UNI: Pressure unit
-    * RST: RS232 test
+    r"""Abstract class that implements astm e1381 basically physical layer with rs232 or serial connection
     """
 
     def __init__(self, port='/dev/ttyACM0', baudrate=9600,timeout=10):
         """Initialize internal variables and serial connection
         :param port: The COM port to open. See the documentation for
             `pyserial <http://pyserial.sourceforge.net/>`_ for an explanation
-            of the possible value. The default value is '/dev/ttyUSB0'.
+            of the possible value. The default value is '/dev/ttyACM0'.
         :type port: str or int
         :param baudrate: 9600, 19200, 38400 where 9600 is the default
         :type baudrate: int
