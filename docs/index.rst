@@ -18,7 +18,9 @@ How to install :
 .. compound::
 pip install astm-serial
 
+
 Quickstart
+
 .. code:: python
 from astm_serial.client import AstmConn
 astm = AstmConn(port='/dev/ttyACM0', baudrate=9600)
