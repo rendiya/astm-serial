@@ -16,17 +16,17 @@ astm client with python for example arduino communication please visit our `gith
 How to install :
 
 .. compound::
-pip install astm-serial
+    pip install astm-serial
 
 
 Quickstart
-
-.. code:: python
-from astm_serial.client import AstmConn
-astm = AstmConn(port='/dev/ttyACM0', baudrate=9600)
-astm.open_session()
-print astm.get_data()
-astm.close_session()
+.. highlight:: python
+    :linenothreshold: 5
+    from astm_serial.client import AstmConn
+    astm = AstmConn(port='/dev/ttyACM0', baudrate=9600)
+    astm.open_session()
+    print astm.get_data()
+    astm.close_session()
 
 Indices and tables
 ==================
