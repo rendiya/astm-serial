@@ -1,1 +1,0 @@
-Search.setIndex({docnames:["index"],envversion:50,filenames:["index.rst"],objects:{},objnames:{},objtypes:{},terms:{hello:0,index:0,modul:0,page:0,search:0,world:0},titles:["Welcome to astm-serial&#8217;s documentation!"],titleterms:{astm:0,document:0,indic:0,serial:0,tabl:0,welcom:0}})
