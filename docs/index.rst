@@ -22,6 +22,7 @@ How to install :
 Quickstart
 
 .. automodule:: astm_serial.client
+   :members:
 
 
 Indices and tables
