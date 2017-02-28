@@ -7,6 +7,7 @@
 import time
 import serial
 from .constanta import *
+from .codec import CheckSum
 
 class AstmConn(object):
     r"""Abstract class that implements the common driver for the TPG 261 and
@@ -37,17 +38,19 @@ class AstmConn(object):
         self.serial = serial.Serial(port = port, baudrate=baudrate, 
         timeout=timeout, writeTimeout=timeout,stopbits=serial.STOPBITS_ONE,
         bytesize=serial.EIGHTBITS,parity=serial.PARITY_NONE)
-    def _astm_string(self, string,c1=0,c2=0,type_data="Intermidiate"):
+    def _astm_string(self, string,type_data="Intermidiate"):
         """Pad carriage return and line feed to a string
         :param string: String to pad
         :type string: str
         :returns: the padded string
         :rtype: str
         """
+        check_sum =CheckSum()
+        command = string+CR
         if type_data == "Intermidiate":
-            return STX + string + ETB + chr(c1) + chr(c2) + CR + LF
+            return STX + command + ETB + checksum.make_checksum(string+STX+CR) + CR + LF
         elif type_data == "Termination":
-            return STX + string + ETX + chr(c1) + chr(c2) + CR + LF
+            return STX + commands + ETX + checksum.make_checksum(string+STX+CR) + CR + LF
 
     def send_command(self, command):
         """Send a command and check if it is positively acknowledged
@@ -68,6 +71,18 @@ class AstmConn(object):
         elif response != ACK:
             message = response.encode('hex')
             return IOError(message)
+    def send_enq(self):
+        """Send ENQ to serial"""
+        self.serial.write(ENQ)
+    def send_ack(self):
+        """Send ACK to serial"""
+        self.serial.write(ACK)
+    def send_nak(self):
+        """Send NAK to serial"""
+        self.serial.write(NAK)
+    def send_eot(self):
+        """Send EOT to serial"""
+        self.serial.write(EOT)
     def open_session(self):
         """Get the session communication in ASTM 
         :send: data ENQ
@@ -78,20 +93,17 @@ class AstmConn(object):
             if self.serial.in_waiting:
                 check_data = self.serial.read()
                 if check_data == ENQ:
-                    self.serial.write(ACK)
+                    self.send_ack()
                     return "client open with ACK"
             else:
-                self.serial.write(ENQ)
+                self.send_enq()
                 data = self.serial.read()
-                print 'data hex: '+data.encode('hex')
-                print 'data byte: '+data
-        
                 if data == ACK:
                     return "open session with ACK response"
                 elif data == NAK:
                     self.nak_handler()
                     return "receiver send NAK"
-                    time.sleep(0.2)
+                    time.sleep(0.5)
                     i = i + 1
     def get_data(self):
         """Get the data that is ready on the device
@@ -101,24 +113,22 @@ class AstmConn(object):
         data = None
         check_data = self.serial.readline()
         if check_data == ENQ:
-            self.serial.write(ACK)
+            self.send_ack()
             data = self.serial.readline()
         elif check_data == NAK:
+            self.nak_handler
             return "status data NAK"
-        elif check_data == ACK:
-            self.serial.write(NAK)
         else:
             data = check_data
         HexData = data.encode('hex')
         print HexData
-        print HexData.decode('hex')
         return data
     def close_session(self):
         """End the communication data
         will send EOT to host
         :return: EOT
         """
-        self.serial.write(EOT)
+        self.send_eot()
         return "session has expired"
     def nak_handler(self):
         """If server send NAK or Not Acknowledge
@@ -126,9 +136,3 @@ class AstmConn(object):
         :return: EOT
         """
         return self.close_session()
-    def status(self):
-        data = self.serial.readline()
-        return data.encode('hex')
-class DataHandler(object):
-    def __init__():
-        return "DataHandler"

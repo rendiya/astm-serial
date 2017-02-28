@@ -8,4 +8,9 @@
 #print astm.status()
 #print astm.close_session()
 
-from astm_serial import version
+#from astm_serial import Version
+
+from astm_serial.codec import CheckSum
+
+checksum = CheckSum()
+print checksum.make_checksum("1H|\^&|||BIOLIS NEO^SYSTEM1|||||HOST^P_1||P|1|20161020075348\x0D\x03")
