@@ -7,7 +7,7 @@
 import time
 import serial
 from .constanta import *
-from .codec import CheckSum
+from .codec import CheckSum,DataHandler
 
 class AstmConn(object):
     r"""Abstract class that implements the common driver for the TPG 261 and
@@ -38,19 +38,6 @@ class AstmConn(object):
         self.serial = serial.Serial(port = port, baudrate=baudrate, 
         timeout=timeout, writeTimeout=timeout,stopbits=serial.STOPBITS_ONE,
         bytesize=serial.EIGHTBITS,parity=serial.PARITY_NONE)
-    def _astm_string(self, string,type_data="Intermidiate"):
-        """Pad carriage return and line feed to a string
-        :param string: String to pad
-        :type string: str
-        :returns: the padded string
-        :rtype: str
-        """
-        check_sum =CheckSum()
-        command = string+CR
-        if type_data == "Intermidiate":
-            return STX + command + ETB + checksum.make_checksum(string+STX+CR) + CR + LF
-        elif type_data == "Termination":
-            return STX + commands + ETX + checksum.make_checksum(string+STX+CR) + CR + LF
 
     def send_command(self, command):
         """Send a command and check if it is positively acknowledged
@@ -60,17 +47,14 @@ class AstmConn(object):
             is returned
         <STX>[FN][TEXT]<ETB>[C1][C2]<CR><LF>
         """
+        string = DataHandler()
+        string = string.astm_string(string=command)
 
-        self.serial.write(self._astm_string(string=command))
-        response = self.serial.readline()
-        print response
-        if response == NAK:
-            message = 'Serial communication returned negative acknowledge'
-            message = response.encode('hex')
-            return IOError(message)
-        elif response != ACK:
-            message = response.encode('hex')
-            return IOError(message)
+        HexData = string.encode('hex')
+        print HexData
+
+        self.serial.write(string)
+
     def send_enq(self):
         """Send ENQ to serial"""
         self.serial.write(ENQ)
@@ -135,4 +119,9 @@ class AstmConn(object):
         the client will be send EOT and close_session
         :return: EOT
         """
-        return self.close_session()
+        check_data = self.serial.readline()
+        if check_data == NAK:
+            return self.close_session()
+        return False
+    def close_connection(self):
+        self.serial.close()

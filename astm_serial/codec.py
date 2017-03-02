@@ -1,6 +1,27 @@
+# -*- coding: utf-8 -*-
+# rendiya (c) 2017
+from .constanta import *
+
 class DataHandler(object):
-    def __init__():
-        return "DataHandler"
+    def __init__(self):
+        pass
+    def astm_string(self, string,type_data="Intermidiate"):
+        """Pad carriage return and line feed to a string
+        :param string: String to pad
+        :type string: str
+        :returns: the padded string
+        :rtype: str
+        """
+        check_sum = CheckSum()
+        command = string+CR
+        print check_sum.make_checksum('{string}{ETX}{CR}'.format(string=string,ETX=ETX,CR=CR))
+        if type_data == "Intermidiate":
+            return "{STX}{command}{ETB}{C}{CR}{LF}".format(STX=STX,command=command,ETB=ETB,C=check_sum.make_checksum(string+ETX+CR),CR=CR,LF=LF)
+            #return STX + command + ETB + check_sum.make_checksum(string+ETX+CR) + CR + LF
+        elif type_data == "Termination":
+            return "{STX}{command}{ETX}{C}{CR}{LF}".format(STX=STX,command=command,ETX=ETX,C=check_sum.make_checksum(string+ETX+CR),CR=CR,LF=LF)
+            #return STX + commands + ETX + check_sum.make_checksum(string+ETB+CR) + CR + LF
+
 
 class CheckSum(object):
     def __init__(self):

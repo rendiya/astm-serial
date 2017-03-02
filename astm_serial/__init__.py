@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# rendiya (c) 2017
         
 class Version(object):
     def version(self):
