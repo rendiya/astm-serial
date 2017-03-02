@@ -2,3 +2,5 @@
 *.o
 *.swp
 /docs/_build/*
+astm_serial.egg-info/*
+dist/*
