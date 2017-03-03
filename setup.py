@@ -17,14 +17,19 @@ if "install" in sys.argv:
             # command is run, so it's more likely to be seen.
             overlay_warning = True
             break
-
+try:
+    long_description = open('README.md').read()
+except:
+    long_description = "astm_serial for e1381"
+    
 setup (
     name='astm-serial',
-    version='0.0.2',
+    version='0.1.1',
     url='https://github.com/rendiya/astm-serial',
     author='rendiya',
     author_email='ligerrendy@gmail.com',
     description=('astm e1381 communication with serial port'),
+    long_description = long_description,
     license='Apache2',
     packages=find_packages(),
     package_dir={'astm_serial':'astm_serial'},
@@ -34,9 +39,8 @@ setup (
 	],
     zip_safe = True,
     classifiers=[
-        'Development Status :: 1 - Planning',
-        'Environment :: Web Environment',
-        'Framework :: Flask',
+        'Development Status :: 3 - Alpha',
+        'Environment :: Console',
         'Intended Audience :: Developers',
         'Intended Audience :: Healthcare Industry',
         'License :: OSI Approved :: Apache Software License',

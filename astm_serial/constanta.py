@@ -4,7 +4,8 @@
 
 #: ASTM specification base encoding.
 ENCODING = 'latin-1'
-
+#: NULL BIT
+NULL = b'\x00'
 #: Message start token.
 STX = b'\x02'
 #: Message end token.

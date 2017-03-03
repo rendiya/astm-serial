@@ -38,6 +38,7 @@ class AstmConn(object):
         self.serial = serial.Serial(port = port, baudrate=baudrate, 
         timeout=timeout, writeTimeout=timeout,stopbits=serial.STOPBITS_ONE,
         bytesize=serial.EIGHTBITS,parity=serial.PARITY_NONE)
+        self.string = DataHandler()
 
     def send_command(self, command):
         """Send a command and check if it is positively acknowledged
@@ -47,14 +48,11 @@ class AstmConn(object):
             is returned
         <STX>[FN][TEXT]<ETB>[C1][C2]<CR><LF>
         """
-        string = DataHandler()
-        string = string.astm_string(string=command)
-
-        HexData = string.encode('hex')
-        print HexData
-
+        string = self.string.astm_string(string=command)
         self.serial.write(string)
-
+    def send_null(self):
+        """Send Null to serial"""
+        self.serial.write(Null)
     def send_enq(self):
         """Send ENQ to serial"""
         self.serial.write(ENQ)
@@ -72,23 +70,22 @@ class AstmConn(object):
         :send: data ENQ
         :return: data ACK
         """
-        i = 0
-        for i in range(0,9):
-            if self.serial.in_waiting:
-                check_data = self.serial.read()
-                if check_data == ENQ:
-                    self.send_ack()
-                    return "client open with ACK"
-            else:
-                self.send_enq()
-                data = self.serial.read()
-                if data == ACK:
-                    return "open session with ACK response"
-                elif data == NAK:
-                    self.nak_handler()
-                    return "receiver send NAK"
-                    time.sleep(0.5)
-                    i = i + 1
+        """Get the session communication in ASTM 
+        :send: data ENQ
+        :return: data ACK
+        """
+        self.send_null()
+        self.serial.readline()
+        self.send_enq()
+        data = self.serial.readline()
+        print data.encode('hex')
+        if data == ACK:
+            return "ACK"
+        elif data == NAK:
+            self.nak_handler()
+            return "NAK"
+        elif data == EOT:
+            return "EOT"
     def get_data(self):
         """Get the data that is ready on the device
         :returns: the raw data
@@ -101,11 +98,11 @@ class AstmConn(object):
             data = self.serial.readline()
         elif check_data == NAK:
             self.nak_handler
-            return "status data NAK"
+            data = "NAK"
+            return "NAK"
         else:
             data = check_data
-        HexData = data.encode('hex')
-        print HexData
+            self.send_ack()
         return data
     def close_session(self):
         """End the communication data
@@ -125,3 +122,7 @@ class AstmConn(object):
         return False
     def close_connection(self):
         self.serial.close()
+    def test(self):
+        self.serial.write("test")
+    def send_string(self,string):
+        self.serial.write(string)

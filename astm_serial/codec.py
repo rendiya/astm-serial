@@ -5,7 +5,7 @@ from .constanta import *
 class DataHandler(object):
     def __init__(self):
         pass
-    def astm_string(self, string,type_data="Intermidiate"):
+    def astm_string(self, string,type_data="Termination"):
         """Pad carriage return and line feed to a string
         :param string: String to pad
         :type string: str
